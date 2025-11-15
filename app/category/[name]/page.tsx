@@ -2,12 +2,13 @@ import Link from "next/link";
 import Image from "next/image";
 import { featuredPosts } from "@/lib/data";
 
-interface Props {
-  params: { name: string };
-}
-
-export default function CategoryPage({ params }: Props) {
-  const name = params.name;
+export default async function CategoryPage({
+  params,
+}: {
+  params?: Promise<{ name: string }>;
+}) {
+  const resolved = params ? await params : undefined;
+  const name = resolved?.name ?? "";
   const posts = featuredPosts.filter(
     (p) => String(p.category).toLowerCase() === name.toLowerCase()
   );

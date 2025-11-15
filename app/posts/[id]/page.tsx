@@ -3,12 +3,10 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { featuredPosts } from "@/lib/data";
 
-interface Props {
-  params: { id: string };
-}
-
-export default function PostPage({ params }: Props) {
-  const post = featuredPosts.find((p) => String(p.id) === params.id);
+export default async function PostPage({ params }: { params?: Promise<{ id: string }> }) {
+  const resolved = params ? await params : undefined;
+  const id = resolved?.id ?? "";
+  const post = featuredPosts.find((p) => String(p.id) === id);
   if (!post) return notFound();
 
   const relatedPosts = post.relatedPostIds
